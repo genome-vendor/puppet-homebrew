@@ -17,9 +17,9 @@ class homebrew::install {
     require   => File['/usr/local'],
   } ~>
   file { '/usr/local/bin/brew':
-    owner   => $homebrew::user,
-    group   => $homebrew::group,
-    mode    => '0775',
+    owner => $homebrew::user,
+    group => $homebrew::group,
+    mode  => '0775',
   }
 
 }
