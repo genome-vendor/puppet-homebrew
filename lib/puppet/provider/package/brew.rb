@@ -34,7 +34,14 @@ Puppet::Type.type(:package).provide(:brew,
       else
         result = execute([command(:brew), :list, '--versions'])
       end
-      list = result.lines.map {|line| name_version_split(line)}
+
+      if result.split.first == 'Warning:' or result.split.first == 'Error:'
+        lines = []
+      else
+        lines = result.lines
+      end
+
+      list = lines.map {|line| name_version_split(line)}
     rescue Puppet::ExecutionFailure => detail
       raise Puppet::Error, "Could not list packages: #{detail}"
     end
