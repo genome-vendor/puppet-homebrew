@@ -10,21 +10,21 @@ class homebrew::install {
 
   exec { "chown ${dir} user ${homebrew::user}":
     command => "chown -R ${homebrew::user} ${dir}",
-    unless  => "test $(find ${dir} -type f \\! -user ${homebrew::user} | wc -l) -eq 0",
+    unless  => "test $(find ${dir} -type f -not -user ${homebrew::user} | wc -l) -eq 0",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/', '/usr/local/bin' ],
     require => File[$dir],
   }
 
   exec { "chown ${dir} group ${homebrew::group}":
     command => "chown -R :${homebrew::group} ${dir}",
-    unless  => "test $(find ${dir} -type f \\! -group ${homebrew::group} | wc -l) -eq 0",
+    unless  => "test $(find ${dir} -type f -not -group ${homebrew::group} | wc -l) -eq 0",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/', '/usr/local/bin' ],
     require => File[$dir],
   }
 
   exec { "chmod ${dir}":
-    command => "find ${dir} \\! -type l \\! -perm 0775 -print0 | xargs -0 chmod 0775",
-    unless  => "test $(find ${dir} \\! -type l \\! -perm 0775 | wc -l) -eq 0",
+    command => "find ${dir} -not -type l -not -perm 0775 -print0 | xargs -0 chmod 0775",
+    unless  => "test $(find ${dir} -not -type l -not -perm 0775 | wc -l) -eq 0",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/', '/usr/local/bin' ],
     require => File[$dir],
   }
